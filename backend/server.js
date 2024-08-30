@@ -1,4 +1,5 @@
 const express = require("express");
+const postsRouter = require("./routes/posts");
 const cors = require("cors");
 const port = process.env.PORT || 8000;
 const logger = require("./tests/logger");
@@ -16,6 +17,6 @@ app.use(express.urlencoded({ extended: false }));
 // connect database
 
 //define routes
-app.use("/api/posts", require("./routes/posts"));
+app.use("/api/posts", postsRouter);
 
 app.listen(8000, () => console.log(`server is running in port ${port}`));
