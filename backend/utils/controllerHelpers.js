@@ -1,5 +1,6 @@
 const pool = require("../config/db");
 
+// Helper function to handle GET requests for all rows in a table
 const handleGetAllRequest = (tableName) => {
   return async (req, res, next) => {
     try {
@@ -13,7 +14,8 @@ const handleGetAllRequest = (tableName) => {
   };
 };
 
-const handleGetPostById = (tableName) => {
+// Helper function to handle GET requests for a single row by ID
+const handleGetByIdRequest = (tableName) => {
   return async (req, res, next) => {
     const postId = req.params.id;
     try {
@@ -21,80 +23,106 @@ const handleGetPostById = (tableName) => {
         `SELECT * FROM ${tableName} WHERE id = $1`,
         [postId]
       );
-      const post = result.rows[0];
-      if (!post) {
-        return res.status(404).json({ message: "Post not found" });
+      const row = result.rows[0];
+      if (!row) {
+        return res.status(404).json({ message: "Row not found" });
       }
-      res.status(200).json(post);
+      res.status(200).json(row);
     } catch (err) {
-      console.error("error fetching post", err);
+      console.error("error fetching row", err);
       res.status(500).json({ message: "Internal Server Error" });
     }
   };
 };
 
-const handleCreatePost = (tableName) => {
-  return async (req, res, next) => {
-    try {
-      const { title, content } = req.body;
-      const result = await pool.query(
-        "INSERT INTO posts (title, content) VALUES ($1, $2) RETURNING *",
-        [title, content]
-      );
-      const newPost = result.rows[0];
-      res.status(201).json(newPost);
-    } catch (err) {
-      console.error("error creating post", err);
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-  };
-};
-
-const handleUpdatePost = (tableName) => {
-  return async (req, res, next) => {
-    const postId = req.params.id;
-    const { title, content } = req.body;
-    try {
-      const result = await pool.query(
-        "UPDATE posts SET title = $1, content = $2 WHERE id = $3 RETURNING *",
-        [title, content, postId]
-      );
-      const updatedPost = result.rows[0];
-      if (!updatedPost) {
-        res.status(404).json({ message: "Post not found" });
-      }
-      res.status(200).json(updatedPost);
-    } catch (err) {
-      console.error("error updating post", err);
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-  };
-};
-
-const handleDeletePost = (tableName) => {
+// Helper function to handle DELETE requests for a single row by ID
+const handleDeleteRequest = (tableName) => {
   return async (req, res, next) => {
     const postId = req.params.id;
     try {
       const result = await pool.query(
-        "DELETE FROM posts WHERE id = $1 RETURNING *",
+        `DELETE FROM ${tableName} WHERE id = $1 RETURNING *`,
         [postId]
       );
       const deletedPost = result.rows[0];
       if (!deletedPost) {
-        res.status(404).json({ message: "Post not found" });
+        res.status(404).json({ message: "Row not found" });
       }
-      res.status(204).json({ message: "Post deleted" });
+      res.status(204).json({ message: "Row deleted" });
     } catch (err) {
-      console.log("error deleting post", err);
+      console.log("Error deleting row", err);
       res.status(500).json({ message: "Internal Server Error" });
     }
+  };
+};
+
+// Helper function to create a new row in a table
+const handleCreateRequest = (tableName) => {
+  return async (data) => {
+    const columns = [];
+    const placeholders = [];
+    const values = [];
+    let idx = 1;
+
+    for (const [key, value] of Object.entries(data)) {
+      if (values !== undefined && value !== "") {
+        columns.push(key);
+        placeholders.push(`$${idx++}`);
+        values.push(value);
+      }
+    }
+
+    if (columns.length === 0) {
+      throw new Error("No fields provided to create a row");
+    }
+
+    const query = `INSERT INTO ${tableName}(${columns.join(", ")})
+      VALUES (${placeholders.join(", ")})
+       RETURNING *`;
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  };
+};
+
+// Helper function to update a row in a table
+const handleUpdateRequest = (tableName) => {
+  return async (id, data) => {
+    const updates = [];
+    const values = [];
+    let idx = 1;
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== undefined && value !== "") {
+        updates.push(`${key} = $${idx++}`);
+        values.push(value);
+      }
+    }
+
+    if (updates.length === 0) {
+      throw new Error("No fields provided to update");
+    }
+
+    updates.push(`updated_at = NOW()`);
+    values.push(id);
+
+    const query = `UPDATE ${tableName}
+    SET ${updates.join(", ")}
+    WHERE id = $${idx}
+    RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+    if (result.rowCount === 0) {
+      throw new Error("Row not found");
+    }
+    return result.rows[0];
   };
 };
 
 module.exports = {
   handleGetAllRequest,
-  handleGetPostById,
-  handleCreatePost,
-  handleUpdatePost,
-  handleDeletePost,
+  handleGetByIdRequest,
+  handleDeleteRequest,
+  handleCreateRequest,
+  handleUpdateRequest,
 };

@@ -1,36 +1,48 @@
-const pool = require("../config/db");
 const {
   handleGetAllRequest,
-  handleGetPostById,
-  handleCreatePost,
-  handleUpdatePost,
-  handleDeletePost,
+  handleGetByIdRequest,
+  handleDeleteRequest,
+  handleCreateRequest,
+  handleUpdateRequest,
 } = require("../utils/controllerHelpers");
-
-// @desc Get all posts
-// @route GET /api/posts
-const getAllPosts = handleGetAllRequest("posts");
-
-// @desc Get post by ID
-// @route GET /api/posts/:id
-const getPostById = handleGetPostById("posts");
 
 // @desc Create a new post
 // @route POST /api/posts
-const createPost = handleCreatePost("posts");
+const createPost = async (req, res, next) => {
+  try {
+    const { user_id, title, content } = req.body;
+    const newPost = await handleCreateRequest("posts")({
+      user_id,
+      title,
+      content,
+    });
+    res.status(201).json(newPost);
+  } catch (err) {
+    next(err);
+  }
+};
 
 // @desc Update a post
 // @route PUT /api/posts/:id
-const updatePost = handleUpdatePost("posts");
-
-// @desc Delete a post
-// @route DELETE /api/posts/:id
-const deletePost = handleDeletePost("posts");
+const updatePost = async (req, res, next) => {
+  try {
+    const postId = req.params.id;
+    const { user_id, title, content } = req.body;
+    const updatedPost = await handleUpdateRequest("posts")(postId, {
+      user_id,
+      title,
+      content,
+    });
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
-  getAllPosts,
-  getPostById,
+  getAllPosts: handleGetAllRequest("posts"),
+  getPostById: handleGetByIdRequest("posts"),
   createPost,
   updatePost,
-  deletePost,
+  deletePost: handleDeleteRequest("posts"),
 };

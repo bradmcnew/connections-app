@@ -1,37 +1,96 @@
-const path = require("path");
-const pool = require("../config/db");
 const {
   handleGetAllRequest,
-  handleGetPostById,
-  handleCreatePost,
-  handleUpdatePost,
-  handleDeletePost,
+  handleGetByIdRequest,
+  handleDeleteRequest,
+  handleCreateRequest,
+  handleUpdateRequest,
 } = require("../utils/controllerHelpers");
-
-// @desc Get all users
-// @route GET /api/users
-const getAllUsers = handleGetAllRequest("users");
-
-// @desc Get post by ID
-// @route GET /api/users/:id
-const getUserById = handleGetPostById("users");
 
 // @desc Create a new post
 // @route POST /api/users
-const createUser = handleCreatePost("users");
+const createUser = async (req, res, next) => {
+  try {
+    const {
+      username,
+      email,
+      password_hash,
+      first_name,
+      last_name,
+      profile_picture,
+      date_of_birth,
+      phone_number,
+      address,
+      is_active,
+      is_verified,
+      roles,
+      last_login,
+    } = req.body;
+    const newUser = await handleCreateRequest("users")({
+      username,
+      email,
+      password_hash,
+      first_name,
+      last_name,
+      profile_picture,
+      date_of_birth,
+      phone_number,
+      address,
+      is_active,
+      is_verified,
+      roles,
+      last_login,
+    });
+    res.status(201).json(newUser);
+  } catch (err) {
+    next(err);
+  }
+};
 
 // @desc Update a post
 // @route PUT /api/users/:id
-const updateUser = handleUpdatePost("users");
-
-// @desc Delete a post
-// @route DELETE /api/users/:id
-const deleteUser = handleDeletePost("users");
+const updateUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const {
+      username,
+      email,
+      password_hash,
+      first_name,
+      last_name,
+      profile_picture,
+      date_of_birth,
+      phone_number,
+      address,
+      is_active,
+      is_verified,
+      roles,
+      last_login,
+    } = req.body;
+    const updatedUser = await handleUpdateRequest("users")(userId, {
+      username,
+      email,
+      password_hash,
+      first_name,
+      last_name,
+      profile_picture,
+      date_of_birth,
+      phone_number,
+      address,
+      is_active,
+      is_verified,
+      roles,
+      last_login,
+    });
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
-  getAllUsers,
-  getUserById,
+  getAllUsers: handleGetAllRequest("users"),
+  getUserById: handleGetByIdRequest("users"),
   createUser,
   updateUser,
-  deleteUser,
+  deleteUser: handleDeleteRequest("users"),
 };

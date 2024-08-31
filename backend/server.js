@@ -1,9 +1,12 @@
 const express = require("express");
 const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
+const professionRoutes = require("./routes/profession");
+const schoolRoutes = require("./routes/school");
 const cors = require("cors");
-const port = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 const logger = require("./tests/logger");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -20,5 +23,10 @@ app.use(express.urlencoded({ extended: false }));
 //define routes
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/professions", professionRoutes);
+app.use("/api/schools", schoolRoutes);
 
-app.listen(8000, () => console.log(`server is running in port ${port}`));
+// error handling middleware
+app.use(errorHandler);
+
+app.listen(8000, () => console.log(`server is running in port ${PORT}`));
