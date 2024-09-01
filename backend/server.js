@@ -3,6 +3,8 @@ const postRoutes = require("./routes/post");
 const userRoutes = require("./routes/user");
 const professionRoutes = require("./routes/profession");
 const schoolRoutes = require("./routes/school");
+const meetingRoutes = require("./routes/meeting");
+const paymentRoutes = require("./routes/payment");
 const cors = require("cors");
 const PORT = process.env.PORT || 8000;
 const logger = require("./tests/logger");
@@ -25,6 +27,8 @@ app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/professions", professionRoutes);
 app.use("/api/schools", schoolRoutes);
+app.use("/api/meetings", meetingRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // error handling middleware
 app.use(errorHandler);

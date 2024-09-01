@@ -22,7 +22,6 @@ const createUser = async (req, res, next) => {
       address,
       is_active,
       is_verified,
-      roles,
       last_login,
     } = req.body;
     const newUser = await handleCreateRequest("users")({
@@ -37,7 +36,6 @@ const createUser = async (req, res, next) => {
       address,
       is_active,
       is_verified,
-      roles,
       last_login,
     });
     res.status(201).json(newUser);
