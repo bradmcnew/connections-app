@@ -85,7 +85,7 @@ const handleCreateRequest = (tableName) => {
 };
 
 // Helper function to update a row in a table
-const handleUpdateRequest = (tableName) => {
+const handleUpdateRequest = (tableName, includeUpdatedAt = true) => {
   return async (id, data) => {
     const updates = [];
     const values = [];
@@ -101,8 +101,9 @@ const handleUpdateRequest = (tableName) => {
     if (updates.length === 0) {
       throw new Error("No fields provided to update");
     }
-
-    updates.push(`updated_at = NOW()`);
+    if (includeUpdatedAt) {
+      updates.push(`updated_at = NOW()`);
+    }
     values.push(id);
 
     const query = `UPDATE ${tableName}

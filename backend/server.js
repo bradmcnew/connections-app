@@ -5,6 +5,7 @@ const professionRoutes = require("./routes/profession");
 const schoolRoutes = require("./routes/school");
 const meetingRoutes = require("./routes/meeting");
 const paymentRoutes = require("./routes/payment");
+const roleRoutes = require("./routes/role");
 const cors = require("cors");
 const PORT = process.env.PORT || 8000;
 const logger = require("./tests/logger");
@@ -29,6 +30,7 @@ app.use("/api/professions", professionRoutes);
 app.use("/api/schools", schoolRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/roles", roleRoutes);
 
 // error handling middleware
 app.use(errorHandler);
