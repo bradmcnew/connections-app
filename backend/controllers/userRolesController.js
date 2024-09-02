@@ -23,7 +23,7 @@ const addUserToRole = async (req, res, next) => {
 };
 
 // @desc Remove a user from a role
-// @route DELETE /api/user-roles/:userId/:roleId
+// @route DELETE /api/user-roles/users/:userId/roles/:roleId
 const removeUserFromRole = async (req, res, next) => {
   try {
     const { userId, roleId } = req.params;
@@ -44,7 +44,7 @@ const removeUserFromRole = async (req, res, next) => {
 };
 
 // @desc Get all users for a role
-// @route GET /api/user-roles/:roleId/users
+// @route GET /api/user-roles/roles/:roleId/users
 const getUsersForRole = async (req, res, next) => {
   try {
     const { roleId } = req.params;
@@ -52,7 +52,7 @@ const getUsersForRole = async (req, res, next) => {
       "users",
       "user_roles",
       "user_id",
-      "id",
+      "role_id",
       roleId
     );
     res.status(200).json(users);
@@ -62,7 +62,7 @@ const getUsersForRole = async (req, res, next) => {
 };
 
 // @desc Get all roles for a user
-// @route GET /api/user-roles/:userId/roles
+// @route GET /api/user-roles/users/:userId/roles
 const getRolesForUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -70,7 +70,7 @@ const getRolesForUser = async (req, res, next) => {
       "roles",
       "user_roles",
       "role_id",
-      "id",
+      "user_id",
       userId
     );
     res.status(200).json(roles);

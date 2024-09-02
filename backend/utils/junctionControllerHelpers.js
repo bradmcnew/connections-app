@@ -42,8 +42,8 @@ const handleGetAllRelated = async (
   const query = `
       SELECT * FROM ${targetTable}
       JOIN ${joinTable}
-      ON ${joinTable}.${joinColumn} = ${targetTable}.${targetColumn}
-      WHERE ${joinTable}.${joinColumn} = $1;
+      ON ${joinTable}.${joinColumn} = ${targetTable}.id
+      WHERE ${joinTable}.${targetColumn} = $1;
     `;
   const result = await pool.query(query, [id]);
   return result.rows;

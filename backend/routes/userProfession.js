@@ -1,39 +1,42 @@
 const express = require("express");
 const router = express.Router();
 
-// Import the controller functions for handling user-role associations
+// Import the controller functions for handling user-profession associations
 const {
-  addUserToRole,
-  removeUserFromRole,
-  getRolesForUser,
-  getUsersForRole,
-} = require("../controllers/userRolesController");
+  addUserToProfession,
+  removeUserFromProfession,
+  getProfessionsForUser,
+  getUsersForProfession,
+} = require("../controllers/userProfessionsController");
 
-// Route to get all roles for a specific user
-// @route GET /api/user-roles/users/:userId/roles
-// @desc Fetches a list of roles associated with a specific user
-// @param {string} userId - The ID of the user whose roles are being fetched
-router.get("/users/:userId/roles", getRolesForUser);
+// Route to get all professions for a specific user
+// @route GET /api/user-professions/users/:userId/professions
+// @desc Fetches a list of professions associated with a specific user
+// @param {string} userId - The ID of the user whose professions are being fetched
+router.get("/users/:userId/professions", getProfessionsForUser);
 
-// Route to get all users for a specific role
-// @route GET /api/user-roles/roles/:roleId/users
-// @desc Fetches a list of users associated with a specific role
-// @param {string} roleId - The ID of the role whose users are being fetched
-router.get("/roles/:roleId/users", getUsersForRole);
+// Route to get all users for a specific profession
+// @route GET /api/user-professions/professions/:professionId/users
+// @desc Fetches a list of users associated with a specific profession
+// @param {string} professionId - The ID of the profession whose users are being fetched
+router.get("/professions/:professionId/users", getUsersForProfession);
 
-// Route to add a user to a role
-// @route POST /api/user-roles/users/:userId/roles/:roleId
-// @desc Adds an association between a user and a role
+// Route to add a user to a profession
+// @route POST /api/user-professions/users/:userId/professions/:professionId
+// @desc Adds an association between a user and a profession
 // @param {string} userId - The ID of the user to be added
-// @param {string} roleId - The ID of the role to which the user is being added
-router.post("/users/:userId/roles/:roleId", addUserToRole);
+// @param {string} professionId - The ID of the profession to which the user is being added
+router.post("/users/:userId/professions/:professionId", addUserToProfession);
 
-// Route to remove a user from a role
-// @route DELETE /api/user-roles/users/:userId/roles/:roleId
-// @desc Removes the association between a user and a role
+// Route to remove a user from a profession
+// @route DELETE /api/user-professions/users/:userId/professions/:professionId
+// @desc Removes the association between a user and a profession
 // @param {string} userId - The ID of the user to be removed
-// @param {string} roleId - The ID of the role from which the user is being removed
-router.delete("/users/:userId/roles/:roleId", removeUserFromRole);
+// @param {string} professionId - The ID of the profession from which the user is being removed
+router.delete(
+  "/users/:userId/professions/:professionId",
+  removeUserFromProfession
+);
 
 // Export the router to be used in the main app
 module.exports = router;

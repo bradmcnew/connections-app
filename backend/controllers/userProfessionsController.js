@@ -5,7 +5,7 @@ const {
 } = require("../utils/junctionControllerHelpers");
 
 // @desc Add a user to a profession
-// @route POST /api/user-profession/:userId/:professionId
+// @route POST /api/user-professions/users/:userId/professions/:professionId
 const addUserToProfession = async (req, res, next) => {
   try {
     const { userId, professionId } = req.params;
@@ -23,7 +23,7 @@ const addUserToProfession = async (req, res, next) => {
 };
 
 // @desc Remove a user from a profession
-// @route DELETE /api/user-profession/:userId/:professionId
+// @route DELETE /api/user-professions/users/:userId/professions/:professionId
 const removeUserFromProfession = async (req, res, next) => {
   try {
     const { userId, professionId } = req.params;
@@ -46,16 +46,16 @@ const removeUserFromProfession = async (req, res, next) => {
 };
 
 // @desc Get all users for a profession
-// @route GET /api/user-profession/:professionId/users
+// @route GET /api/user-professions/professions/:professionId/users
 const getUsersForProfession = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { professionId } = req.params;
     const professions = await handleGetAllRelated(
-      "professions",
+      "users",
       "user_professions",
+      "user_id",
       "profession_id",
-      "id",
-      userId
+      professionId
     );
     res.status(200).json(professions);
   } catch (err) {
@@ -64,16 +64,16 @@ const getUsersForProfession = async (req, res, next) => {
 };
 
 // @desc Get all professions for a user
-// @route GET /api/user-profession/:userId/professions
+// @route GET /api/user-professions/users/:userId/professions
 const getProfessionsForUser = async (req, res, next) => {
   try {
-    const { professionId } = req.params;
+    const { userId } = req.params;
     const users = await handleGetAllRelated(
-      "users",
+      "professions",
       "user_professions",
+      "profession_id",
       "user_id",
-      "id",
-      professionId
+      userId
     );
     res.status(200).json(users);
   } catch (err) {
