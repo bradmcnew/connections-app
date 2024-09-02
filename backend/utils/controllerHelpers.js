@@ -101,9 +101,7 @@ const handleUpdateRequest = (tableName, includeUpdatedAt = true) => {
     if (updates.length === 0) {
       throw new Error("No fields provided to update");
     }
-    if (includeUpdatedAt) {
-      updates.push(`updated_at = NOW()`);
-    }
+    if (includeUpdatedAt) updates.push(`updated_at = NOW()`);
     values.push(id);
 
     const query = `UPDATE ${tableName}
