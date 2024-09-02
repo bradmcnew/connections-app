@@ -7,7 +7,7 @@ const {
   removeUserFromRole,
   getRolesForUser,
   getUsersForRole,
-} = require("../controllers/userRolesController");
+} = require("../controllers/userRolesController.js");
 
 // Route to get all roles for a specific user
 // @route GET /api/user-roles/users/:userId/roles

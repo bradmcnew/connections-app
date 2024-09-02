@@ -7,6 +7,7 @@ const meetingRoutes = require("./routes/meeting");
 const paymentRoutes = require("./routes/payment");
 const roleRoutes = require("./routes/role");
 const userProfessionRoutes = require("./routes/userProfession");
+const userRoleRoutes = require("./routes/userRole");
 const cors = require("cors");
 const PORT = process.env.PORT || 8000;
 const logger = require("./middleware/requestLogger");
@@ -54,6 +55,9 @@ app.use("/api/roles", roleRoutes);
 
 // Define routes for handling user-profession associations
 app.use("/api/user-professions", userProfessionRoutes);
+
+// Define routes for handling user-role associations
+app.use("/api/user-roles", userRoleRoutes);
 
 // Error Handling Middleware
 // Custom error handling middleware to catch and respond to errors
