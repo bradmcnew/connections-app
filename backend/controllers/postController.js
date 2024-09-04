@@ -10,11 +10,12 @@ const {
 // @route POST /api/posts
 const createPost = async (req, res, next) => {
   try {
-    const { user_id, title, content } = req.body;
+    const { user_id, title, content, price } = req.body;
     const newPost = await handleCreateRequest("posts")({
       user_id,
       title,
       content,
+      price,
     });
     res.status(201).json(newPost);
   } catch (err) {
@@ -27,11 +28,12 @@ const createPost = async (req, res, next) => {
 const updatePost = async (req, res, next) => {
   try {
     const postId = req.params.id;
-    const { user_id, title, content } = req.body;
+    const { user_id, title, content, price } = req.body;
     const updatedPost = await handleUpdateRequest("posts")(postId, {
       user_id,
       title,
       content,
+      price,
     });
     res.status(200).json(updatedPost);
   } catch (err) {
