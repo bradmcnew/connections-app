@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
+// validation middleware
+const {
+  validateCreateMeetingData,
+  validateUpdateMeetingData,
+} = require("../middleware/validators/meetingsValidator");
+
 // Import the controller functions for handling meeting routes
 const {
   getAllMeetings,
@@ -25,14 +31,14 @@ router.get("/:id", getMeetingById);
 // @route POST /api/meetings
 // @desc Creates a new meeting entry
 // @body {object} meeting data - The data required to create a new meeting
-router.post("/", createMeeting);
+router.post("/", validateCreateMeetingData, createMeeting);
 
 // Route to update an existing meeting
 // @route PUT /api/meetings/:id
 // @desc Updates an existing meeting's details by ID
 // @param {string} id - The ID of the meeting to update
 // @body {object} updated meeting data - The new data for the meeting
-router.put("/:id", updateMeeting);
+router.put("/:id", validateUpdateMeetingData, updateMeeting);
 
 // Route to delete a meeting by its ID
 // @route DELETE /api/meetings/:id

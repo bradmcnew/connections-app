@@ -1,5 +1,6 @@
 node_modules/
 .env
+.env.test
 # Ignore test files
 package-lock.json
 package.json
