@@ -78,6 +78,11 @@ describe("Test application", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.username).toEqual(updatedUser.username);
     expect(res.body.email).toEqual(updatedUser.email);
+    expect(res.body.is_active).toEqual(updatedUser.is_active);
+    expect(res.body.is_verified).toEqual(updatedUser.is_verified);
+    expect(res.body.phone_number).toEqual(updatedUser.phone_number);
+    expect(res.body.address).toEqual(updatedUser.address);
+    expect(res.body.profile_picture).toEqual(updatedUser.profile_picture);
     await deleteUserById(res.body.id); // Ensure this operation completes
   });
 
