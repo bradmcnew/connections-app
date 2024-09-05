@@ -24,6 +24,9 @@ const createUser = async (req, res, next) => {
       is_verified,
       last_login,
     } = req.body;
+    if (!username || !email || !password_hash) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
     const newUser = await handleCreateRequest("users")({
       username,
       email,

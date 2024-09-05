@@ -91,6 +91,23 @@ describe("Test application", () => {
     const res = await request(app).delete(`/api/users/${testUser.id}`);
     expect(res.statusCode).toEqual(204);
   });
+
+  // Edge Case: Attempt to get a non-existent user
+  test("Get a non-existent user", async () => {
+    const res = await request(app).get("/api/users/999999"); // Assuming this ID does not exist
+    expect(res.statusCode).toEqual(404);
+  });
+
+  // Edge Case: Create a post with missing required fields
+  test("Create a user with missing required fields", async () => {
+    const incompleteUser = {
+      user_id: 1, // Ensure user with this ID exists
+      // Missing 'title' and 'content'
+      price: 45.0,
+    };
+    const res = await request(app).post("/api/users").send(incompleteUser);
+    expect(res.statusCode).toEqual(400); // Assuming 400 Bad Request for missing fields
+  });
 });
 
 afterAll(async () => {

@@ -11,6 +11,9 @@ const {
 const createPost = async (req, res, next) => {
   try {
     const { user_id, title, content, price } = req.body;
+    if (!user_id || !title || !content || !price) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
     const newPost = await handleCreateRequest("posts")({
       user_id,
       title,
