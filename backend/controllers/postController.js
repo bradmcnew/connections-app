@@ -5,15 +5,17 @@ const {
   handleCreateRequest,
   handleUpdateRequest,
 } = require("../utils/controllerHelpers");
+const { validationResult } = require("express-validator");
 
 // @desc Create a new post
 // @route POST /api/posts
 const createPost = async (req, res, next) => {
   try {
-    const { user_id, title, content, price } = req.body;
-    if (!user_id || !title || !content || !price) {
-      return res.status(400).json({ message: "Missing required fields." });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+    const { user_id, title, content, price } = req.body;
     const newPost = await handleCreateRequest("posts")({
       user_id,
       title,
@@ -30,6 +32,10 @@ const createPost = async (req, res, next) => {
 // @route PUT /api/posts/:id
 const updatePost = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     const postId = req.params.id;
     const { user_id, title, content, price } = req.body;
     const updatedPost = await handleUpdateRequest("posts")(postId, {
