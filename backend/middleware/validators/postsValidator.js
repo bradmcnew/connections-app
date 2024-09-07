@@ -1,4 +1,5 @@
 const { body } = require("express-validator");
+const handleValidationErrors = require("./handleValidationErrors");
 
 const validateCreatePostData = [
   // user_id must be an integer
@@ -32,6 +33,7 @@ const validateCreatePostData = [
       }
       return true;
     }),
+  handleValidationErrors,
 ];
 const validateUpdatePostData = [
   // user_id must be an integer if provided
@@ -57,6 +59,7 @@ const validateUpdatePostData = [
       }
       return true;
     }),
+  handleValidationErrors,
 ];
 
 module.exports = { validateUpdatePostData, validateCreatePostData };

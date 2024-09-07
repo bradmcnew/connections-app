@@ -1,5 +1,6 @@
 const { body } = require("express-validator");
 const allowedStatuses = ["pending", "confirmed", "cancelled"];
+const handleValidationErrors = require("./handleValidationErrors");
 
 const validateCreateMeetingData = [
   body("post_id")
@@ -18,37 +19,30 @@ const validateCreateMeetingData = [
     .isISO8601()
     .withMessage("Invalid scheduled_time format"),
   body("status")
-    .optional()
-    .notEmpty()
-    .withMessage("status cannot be empty if provided")
+    .optional({ checkFalsy: true })
     .isIn(allowedStatuses)
     .withMessage(`status must be one of ${allowedStatuses.join(", ")}`),
+  handleValidationErrors,
 ];
 
 const validateUpdateMeetingData = [
   body("post_id")
-    .optional()
-    .notEmpty()
-    .withMessage("post_id cannot be empty if provided")
+    .optional({ checkFalsy: true })
     .isInt()
-    .withMessage("post_id must be an integer"),
+    .withMessage("post_id must be an integer if provided"),
   body("user_id")
-    .optional()
-    .notEmpty()
-    .withMessage("user_id cannot be empty if provided")
+    .optional({ checkFalsy: true })
     .isInt()
-    .withMessage("user_id must be an integer"),
+    .withMessage("user_id must be an integer if provided"),
   body("scheduled_time")
-    .notEmpty()
-    .withMessage("scheduled_time is required")
-    .isISO8601()
-    .withMessage("Invalid scheduled_time format"),
-  body("status")
     .optional()
-    .notEmpty()
-    .withMessage("status cannot be empty if provided")
+    .isISO8601()
+    .withMessage("Invalid scheduled_time format if provided"),
+  body("status")
+    .optional({ checkFalsy: true })
     .isIn(allowedStatuses)
     .withMessage(`status must be one of ${allowedStatuses.join(", ")}`),
+  handleValidationErrors,
 ];
 
 module.exports = {
