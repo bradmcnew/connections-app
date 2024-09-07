@@ -2,11 +2,12 @@ const request = require("supertest");
 const app = require("../app");
 const { pool } = require("../config/db");
 
+// Function to create a test user
 const createTestUser = async () => {
   const user = {
     username: "testuser",
     email: "testuser@test.com",
-    password_hash: "testpassword",
+    password_hash: "goodpwd",
     first_name: "Test",
     last_name: "User",
     profile_picture: "profile.jpg",
@@ -21,12 +22,13 @@ const createTestUser = async () => {
   return res.body; // Return the newly created user
 };
 
+// Function to delete a user by ID
 const deleteUserById = async (id) => {
   await request(app).delete(`/api/users/${id}`);
 };
 
 describe("Test application", () => {
-  test("Not found for site 404", async () => {
+  test("Not found for non-existent route (404)", async () => {
     const res = await request(app).get("/wrong-endpoint");
     expect(res.statusCode).toEqual(404);
   });
@@ -34,6 +36,7 @@ describe("Test application", () => {
   test("Get all users", async () => {
     const res = await request(app).get("/api/users");
     expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBe(true); // Ensure we get an array
   });
 
   test("Create a new user", async () => {
@@ -54,11 +57,12 @@ describe("Test application", () => {
     expect(res.statusCode).toEqual(201);
     expect(res.body.username).toEqual(newUser.username);
     expect(res.body.email).toEqual(newUser.email);
-    await deleteUserById(res.body.id); // Ensure this operation completes
+    await deleteUserById(res.body.id); // Clean up
   });
 
   test("Update an existing user", async () => {
     const testUser = await createTestUser(); // Create a real user
+    console.log("testUser : ", testUser);
     const updatedUser = {
       username: "updateduser",
       email: "updateduser@example.com",
@@ -83,7 +87,7 @@ describe("Test application", () => {
     expect(res.body.phone_number).toEqual(updatedUser.phone_number);
     expect(res.body.address).toEqual(updatedUser.address);
     expect(res.body.profile_picture).toEqual(updatedUser.profile_picture);
-    await deleteUserById(res.body.id); // Ensure this operation completes
+    await deleteUserById(res.body.id); // Clean up
   });
 
   test("Delete an existing user", async () => {
@@ -92,24 +96,29 @@ describe("Test application", () => {
     expect(res.statusCode).toEqual(204);
   });
 
-  // Edge Case: Attempt to get a non-existent user
   test("Get a non-existent user", async () => {
     const res = await request(app).get("/api/users/999999"); // Assuming this ID does not exist
     expect(res.statusCode).toEqual(404);
+    expect(res.body.message).toBe("Row not found"); // Assuming this is the error message
   });
 
-  // Edge Case: Create a post with missing required fields
   test("Create a user with missing required fields", async () => {
     const incompleteUser = {
-      user_id: 1, // Ensure user with this ID exists
-      // Missing 'title' and 'content'
-      price: 45.0,
+      email: "incompleteuser@example.com",
+      // Missing 'username' and 'password_hash'
     };
     const res = await request(app).post("/api/users").send(incompleteUser);
     expect(res.statusCode).toEqual(400); // Assuming 400 Bad Request for missing fields
+    expect(res.body.errors).toBeDefined(); // Ensure errors array is present
+    expect(res.body.errors.some((e) => e.msg === "username is required")).toBe(
+      true
+    );
+    expect(res.body.errors.some((e) => e.msg === "password is required")).toBe(
+      true
+    );
   });
 });
 
 afterAll(async () => {
-  await pool.end();
+  await pool.end(); // Close the database pool connection
 });

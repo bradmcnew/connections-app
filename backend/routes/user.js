@@ -10,6 +10,11 @@ const {
   deleteUser,
 } = require("../controllers/userController");
 
+const {
+  validateCreateUserData,
+  validateUpdateUserData,
+} = require("../middleware/validators/usersValidator");
+
 // Route to get all users
 // @route GET /api/users
 // @desc Fetches a list of all users
@@ -25,14 +30,14 @@ router.get("/:id", getUserById);
 // @route POST /api/users
 // @desc Creates a new user entry
 // @body {object} user data - The data required to create a new user
-router.post("/", createUser);
+router.post("/", validateCreateUserData, createUser);
 
 // Route to update an existing user
 // @route PUT /api/users/:id
 // @desc Updates an existing user's details by ID
 // @param {string} id - The ID of the user to update
 // @body {object} updated user data - The new data for the user
-router.put("/:id", updateUser);
+router.put("/:id", validateUpdateUserData, updateUser);
 
 // Route to delete a user by their ID
 // @route DELETE /api/users/:id
