@@ -9,6 +9,11 @@ const {
   updateRole,
   deleteRole,
 } = require("../controllers/roleController");
+// import validation middleware
+const {
+  validateCreateRoleData,
+  validateUpdateRoleData,
+} = require("../middleware/validators/rolesValidator");
 
 // Route to get all roles
 // @route GET /api/roles
@@ -25,14 +30,14 @@ router.get("/:id", getRoleById);
 // @route POST /api/roles
 // @desc Creates a new role entry
 // @body {object} role data - The data required to create a new role
-router.post("/", createRole);
+router.post("/", validateCreateRoleData, createRole);
 
 // Route to update an existing role
 // @route PUT /api/roles/:id
 // @desc Updates an existing role's details by ID
 // @param {string} id - The ID of the role to update
 // @body {object} updated role data - The new data for the role
-router.put("/:id", updateRole);
+router.put("/:id", validateUpdateRoleData, updateRole);
 
 // Route to delete a role by its ID
 // @route DELETE /api/roles/:id
