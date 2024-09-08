@@ -9,6 +9,11 @@ const {
   updateProfession,
   deleteProfession,
 } = require("../controllers/professionController");
+// import validation middleware
+const {
+  validateCreateProfessionData,
+  validateUpdateProfessionData,
+} = require("../middleware/validators/professionsValidator");
 
 // Route to get all professions
 // @route GET /api/professions
@@ -25,14 +30,14 @@ router.get("/:id", getProfessionById);
 // @route POST /api/professions
 // @desc Creates a new profession entry
 // @body {object} profession data - The data required to create a new profession
-router.post("/", createProfession);
+router.post("/", validateCreateProfessionData, createProfession);
 
 // Route to update an existing profession
 // @route PUT /api/professions/:id
 // @desc Updates an existing profession's details by ID
 // @param {string} id - The ID of the profession to update
 // @body {object} updated profession data - The new data for the profession
-router.put("/:id", updateProfession);
+router.put("/:id", validateUpdateProfessionData, updateProfession);
 
 // Route to delete a profession by its ID
 // @route DELETE /api/professions/:id

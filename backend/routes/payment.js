@@ -13,7 +13,7 @@ const {
 const {
   validateCreatePaymentData,
   validateUpdatePaymentData,
-} = require("../middleware/validators/paymentValidator");
+} = require("../middleware/validators/paymentsValidator");
 
 // Route to get all payments
 // @route GET /api/payments
