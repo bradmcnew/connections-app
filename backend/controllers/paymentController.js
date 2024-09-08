@@ -1,3 +1,4 @@
+const { parse } = require("dotenv");
 const {
   handleGetAllRequest,
   handleGetByIdRequest,
@@ -14,7 +15,7 @@ const createPayment = async (req, res, next) => {
     const newPayment = await handleCreateRequest("payments")({
       sender_id,
       receiver_id,
-      amount,
+      amount: parseFloat(amount),
       status,
     });
     res.status(201).json(newPayment);
@@ -32,7 +33,7 @@ const updatePayment = async (req, res, next) => {
     const updatedPayment = await handleUpdateRequest("payments")(paymentId, {
       sender_id,
       receiver_id,
-      amount,
+      amount: parseFloat(amount),
       status,
     });
     res.status(200).json(updatedPayment);

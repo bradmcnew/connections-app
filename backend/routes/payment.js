@@ -9,6 +9,11 @@ const {
   updatePayment,
   deletePayment,
 } = require("../controllers/paymentController");
+// import validation middleware
+const {
+  validateCreatePaymentData,
+  validateUpdatePaymentData,
+} = require("../middleware/validators/paymentValidator");
 
 // Route to get all payments
 // @route GET /api/payments
@@ -25,14 +30,14 @@ router.get("/:id", getPaymentById);
 // @route POST /api/payments
 // @desc Creates a new payment entry
 // @body {object} payment data - The data required to create a new payment
-router.post("/", createPayment);
+router.post("/", validateCreatePaymentData, createPayment);
 
 // Route to update an existing payment
 // @route PUT /api/payments/:id
 // @desc Updates an existing payment's details by ID
 // @param {string} id - The ID of the payment to update
 // @body {object} updated payment data - The new data for the payment
-router.put("/:id", updatePayment);
+router.put("/:id", validateUpdatePaymentData, updatePayment);
 
 // Route to delete a payment by its ID
 // @route DELETE /api/payments/:id
