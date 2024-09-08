@@ -8,13 +8,13 @@ const {
 // @route POST /api/user-schools/:userId/:schoolId
 const addUserToSchool = async (req, res, next) => {
   try {
-    const { userId, schoolId } = req.params;
+    const { user_id, school_id } = req.body;
     const newAssociation = await handleAddAssociation(
       "user_schools",
       "user_id",
       "school_id",
-      userId,
-      schoolId
+      user_id,
+      school_id
     );
     res.status(201).json(newAssociation);
   } catch (err) {
@@ -34,7 +34,7 @@ const removeUserFromSchool = async (req, res, next) => {
       userId,
       schoolId
     );
-    if (rowCount === 0) {
+    if (!rowCount) {
       return res.status(404).json({ message: "Association not found" });
     }
     res.status(200).json({ message: "User removed from school successfully." });

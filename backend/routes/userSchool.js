@@ -8,6 +8,10 @@ const {
   getSchoolsForUser,
   getUsersForSchool,
 } = require("../controllers/userSchoolsController.js");
+// import validator functions
+const {
+  validateCreateUserSchoolData,
+} = require("../middleware/validators/userSchoolsValidator");
 
 // Route to get all schools for a specific user
 // @route GET /api/user-schools/users/:userId/schools
@@ -26,7 +30,7 @@ router.get("/schools/:schoolId/users", getUsersForSchool);
 // @desc Adds an association between a user and a school
 // @param {string} userId - The ID of the user to be added
 // @param {string} schoolId - The ID of the school to which the user is being added
-router.post("/users/:userId/schools/:schoolId", addUserToSchool);
+router.post("/", validateCreateUserSchoolData, addUserToSchool);
 
 // Route to remove a user from a school
 // @route DELETE /api/user-schools/users/:userId/schools/:schoolId
