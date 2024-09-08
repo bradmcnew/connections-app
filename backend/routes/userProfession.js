@@ -8,6 +8,9 @@ const {
   getProfessionsForUser,
   getUsersForProfession,
 } = require("../controllers/userProfessionsController");
+const {
+  validateCreateUserProfessionData,
+} = require("../middleware/validators/userProfessionsValidator");
 
 // Route to get all professions for a specific user
 // @route GET /api/user-professions/users/:userId/professions
@@ -26,7 +29,7 @@ router.get("/professions/:professionId/users", getUsersForProfession);
 // @desc Adds an association between a user and a profession
 // @param {string} userId - The ID of the user to be added
 // @param {string} professionId - The ID of the profession to which the user is being added
-router.post("/users/:userId/professions/:professionId", addUserToProfession);
+router.post("/", validateCreateUserProfessionData, addUserToProfession);
 
 // Route to remove a user from a profession
 // @route DELETE /api/user-professions/users/:userId/professions/:professionId

@@ -5,16 +5,17 @@ const {
 } = require("../utils/junctionControllerHelpers");
 
 // @desc Add a user to a profession
-// @route POST /api/user-professions/users/:userId/professions/:professionId
+// @route POST /api/user-professions/
 const addUserToProfession = async (req, res, next) => {
   try {
-    const { userId, professionId } = req.params;
+    const { user_id, profession_id } = req.body;
+    console.log("Received userId:", user_id, "professionId:", profession_id);
     const newAssociation = await handleAddAssociation(
       "user_professions",
       "user_id",
       "profession_id",
-      userId,
-      professionId
+      user_id,
+      profession_id
     );
     res.status(201).json(newAssociation);
   } catch (err) {
@@ -22,8 +23,10 @@ const addUserToProfession = async (req, res, next) => {
   }
 };
 
-// @desc Remove a user from a profession
+// Route to remove a user from a profession
 // @route DELETE /api/user-professions/users/:userId/professions/:professionId
+// @param {string} userId - The ID of the user to be removed
+// @param {string} professionId - The ID of the profession from which the user is being removed
 const removeUserFromProfession = async (req, res, next) => {
   try {
     const { userId, professionId } = req.params;
@@ -34,11 +37,11 @@ const removeUserFromProfession = async (req, res, next) => {
       userId,
       professionId
     );
-    if (rowCount === 0) {
+    if (!rowCount) {
       return res.status(404).json({ message: "Association not found" });
     }
     res
-      .status(200)
+      .status(204)
       .json({ message: "User removed from profession successfully." });
   } catch (err) {
     next(err);
@@ -57,6 +60,9 @@ const getUsersForProfession = async (req, res, next) => {
       "profession_id",
       professionId
     );
+    if (!professions) {
+      return res.status(404).json({ message: "Profession not found" });
+    }
     res.status(200).json(professions);
   } catch (err) {
     next(err);
@@ -75,6 +81,9 @@ const getProfessionsForUser = async (req, res, next) => {
       "user_id",
       userId
     );
+    if (!users) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.status(200).json(users);
   } catch (err) {
     next(err);
