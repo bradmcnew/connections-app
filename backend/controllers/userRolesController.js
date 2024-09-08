@@ -4,8 +4,8 @@ const {
   handleGetAllRelated,
 } = require("../utils/junctionControllerHelpers");
 
-// @desc Add a user to a role
-// @route POST /api/user-roles/:userId/:roleId
+// @desc Add a user-role association
+// @route POST /api/user-roles
 const addUserToRole = async (req, res, next) => {
   try {
     const { user_id, role_id } = req.body;
@@ -22,7 +22,7 @@ const addUserToRole = async (req, res, next) => {
   }
 };
 
-// @desc Remove a user from a role
+// @desc Remove a user-role association
 // @route DELETE /api/user-roles/users/:userId/roles/:roleId
 const removeUserFromRole = async (req, res, next) => {
   try {

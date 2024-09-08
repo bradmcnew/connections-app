@@ -4,8 +4,8 @@ const {
   handleGetAllRelated,
 } = require("../utils/junctionControllerHelpers");
 
-// @desc Add a user to a profession
-// @route POST /api/user-professions/
+// @desc Add a user-profession association
+// @route POST /api/user-professions
 const addUserToProfession = async (req, res, next) => {
   try {
     const { user_id, profession_id } = req.body;
@@ -23,7 +23,7 @@ const addUserToProfession = async (req, res, next) => {
   }
 };
 
-// Route to remove a user from a profession
+// Route to remove a user-profession association
 // @route DELETE /api/user-professions/users/:userId/professions/:professionId
 // @param {string} userId - The ID of the user to be removed
 // @param {string} professionId - The ID of the profession from which the user is being removed

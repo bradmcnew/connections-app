@@ -25,10 +25,9 @@ router.get("/users/:userId/professions", getProfessionsForUser);
 router.get("/professions/:professionId/users", getUsersForProfession);
 
 // Route to add a user to a profession
-// @route POST /api/user-professions/users/:userId/professions/:professionId
+// @route POST /api/user-professions
 // @desc Adds an association between a user and a profession
-// @param {string} userId - The ID of the user to be added
-// @param {string} professionId - The ID of the profession to which the user is being added
+// @body {object} profession data - The data required to create a user-profession association
 router.post("/", validateCreateUserProfessionData, addUserToProfession);
 
 // Route to remove a user from a profession

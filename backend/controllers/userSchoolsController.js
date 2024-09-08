@@ -4,8 +4,8 @@ const {
   handleGetAllRelated,
 } = require("../utils/junctionControllerHelpers");
 
-// @desc Add a user to a school
-// @route POST /api/user-schools/:userId/:schoolId
+// @desc Add a user-school association
+// @route POST /api/user-schools
 const addUserToSchool = async (req, res, next) => {
   try {
     const { user_id, school_id } = req.body;
@@ -22,7 +22,7 @@ const addUserToSchool = async (req, res, next) => {
   }
 };
 
-// @desc Remove a user from a school
+// @desc Remove a user-school association
 // @route DELETE /api/user-schools/:userId/:schoolId
 const removeUserFromSchool = async (req, res, next) => {
   try {

@@ -26,10 +26,9 @@ router.get("/users/:userId/schools", getSchoolsForUser);
 router.get("/schools/:schoolId/users", getUsersForSchool);
 
 // Route to add a user to a school
-// @route POST /api/user-schools/users/:userId/schools/:schoolId
+// @route POST /api/user-schools
 // @desc Adds an association between a user and a school
-// @param {string} userId - The ID of the user to be added
-// @param {string} schoolId - The ID of the school to which the user is being added
+// @body {object} profession data - The data required to create a new user-school association
 router.post("/", validateCreateUserSchoolData, addUserToSchool);
 
 // Route to remove a user from a school
