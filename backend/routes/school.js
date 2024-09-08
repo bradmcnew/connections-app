@@ -9,6 +9,11 @@ const {
   updateSchool,
   deleteSchool,
 } = require("../controllers/schoolController");
+// import validation middleware
+const {
+  validateCreateSchoolData,
+  validateUpdateSchoolData,
+} = require("../middleware/validators/schoolsValidator");
 
 // Route to get all schools
 // @route GET /api/schools
@@ -25,14 +30,14 @@ router.get("/:id", getSchoolById);
 // @route POST /api/schools
 // @desc Creates a new school entry
 // @body {object} school data - The data required to create a new school
-router.post("/", createSchool);
+router.post("/", validateCreateSchoolData, createSchool);
 
 // Route to update an existing school
 // @route PUT /api/schools/:id
 // @desc Updates an existing school's details by ID
 // @param {string} id - The ID of the school to update
 // @body {object} updated school data - The new data for the school
-router.put("/:id", updateSchool);
+router.put("/:id", validateUpdateSchoolData, updateSchool);
 
 // Route to delete a school by its ID
 // @route DELETE /api/schools/:id
