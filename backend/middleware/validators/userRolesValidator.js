@@ -1,9 +1,9 @@
-// validators/userProfessions.js
 const { check } = require("express-validator");
 const handleValidationErrors = require("./handleValidationErrors");
 const { existsInTable } = require("./helpers");
 
-const validateCreateUserProfessionData = [
+// Validator for creating a new entry in the user_schools junction table
+const validateCreateUserRoleData = [
   check("user_id")
     .isInt()
     .withMessage("user_id must be an integer")
@@ -14,13 +14,13 @@ const validateCreateUserProfessionData = [
       }
     }),
 
-  check("profession_id")
+  check("role_id")
     .isInt()
-    .withMessage("profession_id must be an integer")
-    .custom(async (profession_id) => {
-      const exists = await existsInTable("professions", "id", profession_id);
+    .withMessage("role_id must be an integer")
+    .custom(async (school_id) => {
+      const exists = await existsInTable("roles", "id", school_id);
       if (!exists) {
-        throw new Error("profession_id does not exist");
+        throw new Error("role_id does not exist");
       }
     }),
 
@@ -28,5 +28,5 @@ const validateCreateUserProfessionData = [
 ];
 
 module.exports = {
-  validateCreateUserProfessionData,
+  validateCreateUserRoleData,
 };

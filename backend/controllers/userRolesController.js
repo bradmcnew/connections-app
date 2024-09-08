@@ -8,13 +8,13 @@ const {
 // @route POST /api/user-roles/:userId/:roleId
 const addUserToRole = async (req, res, next) => {
   try {
-    const { userId, roleId } = req.params;
+    const { user_id, role_id } = req.body;
     const newAssociation = await handleAddAssociation(
       "user_roles",
       "user_id",
       "role_id",
-      userId,
-      roleId
+      user_id,
+      role_id
     );
     res.status(201).json(newAssociation);
   } catch (err) {
@@ -34,7 +34,7 @@ const removeUserFromRole = async (req, res, next) => {
       userId,
       roleId
     );
-    if (rowCount === 0) {
+    if (!rowCount) {
       return res.status(404).json({ message: "Association not found" });
     }
     res.status(200).json({ message: "User removed from role successfully." });

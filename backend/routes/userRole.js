@@ -8,6 +8,10 @@ const {
   getRolesForUser,
   getUsersForRole,
 } = require("../controllers/userRolesController.js");
+// import validator functions
+const {
+  validateCreateUserRoleData,
+} = require("../middleware/validators/userRolesValidator");
 
 // Route to get all roles for a specific user
 // @route GET /api/user-roles/users/:userId/roles
@@ -22,11 +26,11 @@ router.get("/users/:userId/roles", getRolesForUser);
 router.get("/roles/:roleId/users", getUsersForRole);
 
 // Route to add a user to a role
-// @route POST /api/user-roles/users/:userId/roles/:roleId
+// @route POST /api/user-roles
 // @desc Adds an association between a user and a role
 // @param {string} userId - The ID of the user to be added
 // @param {string} roleId - The ID of the role to which the user is being added
-router.post("/users/:userId/roles/:roleId", addUserToRole);
+router.post("/", validateCreateUserRoleData, addUserToRole);
 
 // Route to remove a user from a role
 // @route DELETE /api/user-roles/users/:userId/roles/:roleId
